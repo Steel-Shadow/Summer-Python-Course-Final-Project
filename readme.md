@@ -4,7 +4,7 @@
 
 ## Introduction
 
-Given a knowledge graph in the field of computer science, a click on a knowledge node in theknowledge graph will display the recommended courses related to that particular knowledge point.
+Given a knowledge graph in the field of computer science, a click on a knowledge node in the knowledge graph will display the recommended courses related to that particular knowledge point.
 
 Sources of courses include:
 
@@ -40,4 +40,4 @@ points (up to maximum of 6 points).
 
 2. Implement CRUD (Create, Read, Update, Delete) operations and bookmarking for the knowledge graph.
 
-3. Add other functionalities based on own practicality and workload, and give scores to thefunctions accordingly
+3. Add other functionalities based on own practicality and workload, and give scores to the functions accordingly
