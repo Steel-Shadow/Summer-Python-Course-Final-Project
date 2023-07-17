@@ -1,24 +1,30 @@
-from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from src.websites.driver import init_driver
+from typing import Iterable
 
 
-def scraping(driver: WebDriver, course: str):
-    # 导航到目标网页
-    url = f"https://open.163.com/newview/search/{course}"  # 替换为目标网站的URL
-    driver.get(url)
+def scraping(keyword_collections: Iterable[str]):
+    driver = init_driver()
 
-    WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, '//*[@id="__layout"]/div/div[3]/div/div[2]/div[1]/div[3]')))
+    for keyword in keyword_collections:
+        # 导航到目标网页
+        url = f"https://open.163.com/newview/search/{keyword}"  # 替换为目标网站的URL
+        driver.get(url)
 
-    courses = driver.find_elements(By.CLASS_NAME, 'type-card')
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//*[@id="__layout"]/div/div[3]/div/div[2]/div[1]/div[3]')))
 
-    output = list()
-    for i in courses:
-        link = i.find_element(By.TAG_NAME, 'a').get_attribute('href')
-        t = i.find_element(By.CLASS_NAME, 'info').find_elements(By.CLASS_NAME, 'subname')
-        output.append((t[0].text, link, t[1].text))
+        courses = driver.find_elements(By.CLASS_NAME, 'type-card')
 
-    for i in output:
-        print(i)
+        course_info_list = list()
+        for i in courses:
+            link = i.find_element(By.TAG_NAME, 'a').get_attribute('href')
+            t = i.find_element(By.CLASS_NAME, 'info').find_elements(By.CLASS_NAME, 'subname')
+            course_info_list.append((t[0].text, link, t[1].text))
+
+        for info in course_info_list:
+            print(info)
+
+    driver.close()

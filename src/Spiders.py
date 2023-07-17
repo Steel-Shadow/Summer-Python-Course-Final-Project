@@ -1,34 +1,42 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from typing import Iterable
 
-from src.websites import icourses, bilibili, netease, cmooc
+from websites import icourses, bilibili, netease, cmooc, coursera, haodaxue, imooc, mooc
+import multiprocessing
 
 
 class Spiders:
-    __options = Options()
-    __options.add_argument('--headless')
-
-    # 浏览器驱动
-    driver = webdriver.Chrome(options=__options)
     # 网页 -> 抓取函数
     websites_scraping = {
         'icourses': icourses.scraping,
         'bilibili': bilibili.scraping,
         'netease ': netease.scraping,
-        'cmooc': cmooc.scraping
+        'cmooc': cmooc.scraping,
+        'coursera': coursera.scraping,
+        'haodaxue': haodaxue.scraping,
+        'imooc': imooc.scraping,
+        'mooc': mooc.scraping,
     }
 
-    @classmethod
-    def scraping(cls, site: str, course: str):
-        scraping = cls.websites_scraping.get(site)
-        scraping(cls.driver, course)
+    @staticmethod
+    def err_call_back(err):
+        print(f'多进程爬取出错啦~ error：{str(err)}')
 
     @classmethod
-    def driver_close(cls):
-        cls.driver.close()
+    def scraping(cls, keyword_collections: Iterable[str]):
+        """
+        请尽量少调用(把待搜索的关键词放一块)，每次抓取都要重新 打开/关闭 浏览器
+
+        已使用多进程优化
+        """
+        pool = multiprocessing.Pool(8)
+        for web in cls.websites_scraping:
+            scraping = cls.websites_scraping.get(web)
+            pool.apply_async(scraping, (keyword_collections,), error_callback=cls.err_call_back)
+            # scraping(keyword_collections)
+
+        pool.close()
+        pool.join()
 
 
 if __name__ == '__main__':
-    for i in Spiders.websites_scraping:
-        Spiders.scraping(i, '操作系统')
-        print('----------')
+    Spiders.scraping(('python',))

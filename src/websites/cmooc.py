@@ -1,26 +1,32 @@
-from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from typing import Iterable
+from src.websites.driver import init_driver
 
 
-def scraping(driver: WebDriver, course: str):
-    # 导航到目标网页
-    url = f"https://www.cmooc.com/?s={course}"  # 替换为目标网站的URL
-    driver.get(url)
+def scraping(keyword_collections: Iterable[str]):
+    driver = init_driver()
 
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.ID, 'newscontent')))
+    for course in keyword_collections:
+        # 导航到目标网页
+        url = f"https://www.cmooc.com/?s={course}"  # 替换为目标网站的URL
+        driver.get(url)
 
-    courses = driver.find_elements(By.CLASS_NAME, 'course-list')
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'newscontent')))
 
-    output = list()
-    for i in courses:
-        t = i.find_element(By.TAG_NAME, 'a')
-        title = t.get_attribute('title')
-        link = t.get_attribute('href')
+        courses = driver.find_elements(By.CLASS_NAME, 'course-list')
 
-        output.append((title, link, ''))
+        course_info_list = list()
+        for i in courses:
+            t = i.find_element(By.TAG_NAME, 'a')
+            title = t.get_attribute('title')
+            link = t.get_attribute('href')
 
-    for i in output:
-        print(i)
+            course_info_list.append((title, link, ''))
+
+        for info in course_info_list:
+            print(info)
+
+    driver.close()
