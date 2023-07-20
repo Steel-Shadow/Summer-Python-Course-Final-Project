@@ -13,8 +13,12 @@ def scraping(keyword_collections: Iterable[str]):
         url = f"https://www.cmooc.com/?s={course}"  # 替换为目标网站的URL
         driver.get(url)
 
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.ID, 'newscontent')))
+        try:
+            WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.ID, 'newscontent')))
+        except:
+            yield list()
+            continue
 
         courses = driver.find_elements(By.CLASS_NAME, 'course-list')
 
@@ -24,9 +28,8 @@ def scraping(keyword_collections: Iterable[str]):
             title = t.get_attribute('title')
             link = t.get_attribute('href')
 
-            course_info_list.append((title, link, ''))
+            course_info_list.append((title, link))
 
-        for info in course_info_list:
-            print(info)
+        yield course_info_list
 
     driver.close()

@@ -12,20 +12,22 @@ def scraping(keyword_collections: Iterable[str]):
     for keyword in keyword_collections:
         url = f"https://www.imooc.com/search/?words={keyword}"
         driver.get(url)
-        wait = WebDriverWait(driver, 10)
-        wait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[5]/div/div[3]/div[1]/div[3]")))
+
+        try:
+            WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, "/html/body/div[5]/div/div[3]/div[1]/div[3]")))
+        except:
+            yield list()
+            continue
+
         course_links = driver.find_elements(By.XPATH,
                                             '//a[@class="js-zhuge-allResult item-title js-result-item js-item-title "]')
 
-        course_link_list = list()
-        course_name_list = list()
+        course_info_list = list()
 
         for link in course_links:
-            course_link_list.append(link.get_attribute('href'))
-            course_name_list.append(link.text)
+            course_info_list.append((link.text, link.get_attribute('href')))
 
-        course_info_list = zip(course_name_list, course_link_list)
-        for info in course_info_list:
-            print(info)
+        yield course_info_list
 
     driver.close()

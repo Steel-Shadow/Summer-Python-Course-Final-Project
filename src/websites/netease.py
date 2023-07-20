@@ -13,18 +13,20 @@ def scraping(keyword_collections: Iterable[str]):
         url = f"https://open.163.com/newview/search/{keyword}"  # 替换为目标网站的URL
         driver.get(url)
 
-        WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.XPATH, '//*[@id="__layout"]/div/div[3]/div/div[2]/div[1]/div[3]')))
+        try:
+            WebDriverWait(driver, 1).until(
+                EC.visibility_of_element_located((By.XPATH, '//*[@id="__layout"]/div/div[3]/div/div[2]/div[1]/div[3]')))
+        except:
+            yield list()
+            continue
 
-        courses = driver.find_elements(By.CLASS_NAME, 'type-card')
+        courses = driver.find_elements(By.CLASS_NAME, 'card-link')
 
         course_info_list = list()
         for i in courses:
-            link = i.find_element(By.TAG_NAME, 'a').get_attribute('href')
-            t = i.find_element(By.CLASS_NAME, 'info').find_elements(By.CLASS_NAME, 'subname')
-            course_info_list.append((t[0].text, link, t[1].text))
+            link = i.find_element(By.TAG_NAME, 'a')
+            course_info_list.append((link.get_attribute('title'), link.get_attribute('href')))
 
-        for info in course_info_list:
-            print(info)
+        yield course_info_list
 
     driver.close()

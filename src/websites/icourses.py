@@ -23,10 +23,11 @@ def scraping(keyword_collections: Iterable[str]):
 
         # 显式等待 搜索结果
         try:
-            WebDriverWait(driver, 1).until(
+            WebDriverWait(driver, 2).until(
                 EC.element_to_be_clickable((By.CLASS_NAME, 'icourse-desc-title')))
         except:
-            return
+            yield list()
+            continue
 
         courses = driver.find_elements(By.CLASS_NAME, 'icourse-desc')
         course_info_list = list()
@@ -35,7 +36,6 @@ def scraping(keyword_collections: Iterable[str]):
             link = title.get_attribute('href')
             course_info_list.append((title.text, link))
 
-        for info in course_info_list:
-            print(info)
+        yield course_info_list
 
     driver.close()
