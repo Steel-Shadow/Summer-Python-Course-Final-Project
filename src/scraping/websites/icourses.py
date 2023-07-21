@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from typing import Iterable
 
-from src.websites.driver import init_driver
+from src.scraping.websites.driver import init_driver
 
 
 def scraping(keyword_collections: Iterable[str]):

@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from src.websites.driver import init_driver
+from src.scraping.websites.driver import init_driver
 
 from typing import Iterable
 

@@ -1,6 +1,6 @@
 import re
 from selenium.webdriver.common.by import By
-from src.websites.driver import init_driver
+from src.scraping.websites.driver import init_driver
 from typing import Iterable
 
 
