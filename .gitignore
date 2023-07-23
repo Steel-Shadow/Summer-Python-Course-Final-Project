@@ -2,3 +2,4 @@
 .idea
 software
 temp.py
+__pycache__

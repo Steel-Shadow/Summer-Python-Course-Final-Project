@@ -3,31 +3,29 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from src.scraping.websites.driver import init_driver
 
-from typing import Iterable
+driver = init_driver()
 
 
-def scraping(keyword_collections: Iterable[str]):
-    driver = init_driver()
+def scraping(keyword: str):
+    url = f"https://www.imooc.com/search/?words={keyword}"
+    driver.get(url)
 
-    for keyword in keyword_collections:
-        url = f"https://www.imooc.com/search/?words={keyword}"
-        driver.get(url)
+    try:
+        WebDriverWait(driver, 1).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div[5]/div/div[3]/div[1]/div[3]")))
+    except:
+        return list()
 
-        try:
-            WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.XPATH, "/html/body/div[5]/div/div[3]/div[1]/div[3]")))
-        except:
-            yield list()
-            continue
+    course_links = driver.find_elements(By.XPATH,
+                                        '//a[@class="js-zhuge-allResult item-title js-result-item js-item-title "]')
 
-        course_links = driver.find_elements(By.XPATH,
-                                            '//a[@class="js-zhuge-allResult item-title js-result-item js-item-title "]')
+    course_info_list = list()
 
-        course_info_list = list()
+    for link in course_links:
+        course_info_list.append(('imooc', link.text, link.get_attribute('href'), ''))
 
-        for link in course_links:
-            course_info_list.append((link.text, link.get_attribute('href')))
+    return course_info_list
 
-        yield course_info_list
 
+def close():
     driver.close()

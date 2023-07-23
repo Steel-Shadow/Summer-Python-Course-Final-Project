@@ -1,40 +1,32 @@
-from line_profiler_pycharm import profile
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from src.scraping.websites.driver import init_driver
-from typing import Iterable
+
+driver = init_driver()
 
 
-@profile
-def scraping(keyword_collections: Iterable[str]):
-    driver = init_driver()
+def scraping(keyword: str):
+    url = f"https://www.cnmooc.org/portal/frontCourseIndex/course.mooc?k={keyword}"
+    driver.get(url)
 
-    for keyword in keyword_collections:
-        url = f"https://www.cnmooc.org/portal/frontCourseIndex/course.mooc?k={keyword}"
+    try:
+        WebDriverWait(driver, 1).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "view-item")))
+    except:  # 超时返回空
+        return list()
 
-        driver.get(url)
+    courses = driver.find_elements(By.CLASS_NAME, 'view-item')
 
-        try:
-            WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "view-item")))
-        except:  # 超时返回空
-            yield list()
-            continue
+    course_info_list = list()
+    for i in courses:
+        link = 'https://www.cnmooc.org' + i.find_element(By.XPATH, './/div[@class="view-img"]').get_attribute('href')
+        name = i.find_element(By.XPATH, './/a[@class="link-default link-course-detail"]').text
+        school = i.find_element(By.XPATH, './/*[@class="t-school substr"]').text
+        course_info_list.append(('haodaxue', name, link, school))
 
-        course_links = driver.find_elements(By.XPATH, '//div[@class="view-img"]')
-        course_names = driver.find_elements(By.XPATH, '//a[@class="link-default link-course-detail"]')
+    return course_info_list
 
-        course_link_list = list()
-        course_name_list = list()
 
-        for link in course_links:
-            course_link_list.append("https://www.cnmooc.org" + link.get_attribute('href'))
-
-        for name in course_names:
-            course_name_list.append(name.text)
-
-        course_info_list = zip(course_name_list, course_link_list)
-        yield course_info_list
-
+def close():
     driver.close()

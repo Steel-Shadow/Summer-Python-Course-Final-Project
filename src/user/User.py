@@ -18,7 +18,7 @@ class User:
             password VARCHAR(255) NOT NULL)''',
         '''create table if not exists user_node_relationship(
             relationship_id	INT AUTO_INCREMENT PRIMARY KEY,
-            user_id	INT,
+            user_id	INT NOT NULL,
             node_name varchar(255) NOT NULL)'''
     ]
     # 执行初始化
@@ -47,17 +47,16 @@ class User:
 
     @classmethod
     def login(cls, account: str, password: str):
-        """登录成功返回 0 ，否则 -1 """
+        """登录成功返回 User实例 ，否则返回空 """
         query = "SELECT * FROM users WHERE account = %s AND password = %s"
-        params = (account, password)
-        User.cursor.execute(query, params)
+        User.cursor.execute(query, (account, password))
 
         result = User.cursor.fetchall()
         if result:
             # 登录成功
             return User(result[0][0], account)
         else:
-            # 账户不存在或密码错误'
+            # 账户不存在或密码错误
             return None
 
     @classmethod
@@ -73,29 +72,34 @@ class User:
         User.cursor.execute('ALTER TABLE users AUTO_INCREMENT = 0')
         User.db.commit()
 
-    def has_node(self, node_name: str) -> int:
-        """检查该用户是否有某个知识图谱节点，有节点返回 0 ，否则 -1"""
-        query = f"SELECT * FROM user_node_relationship WHERE user_id = {self.id} AND node_name = {node_name}"
-        User.cursor.execute(query)
+    def has_node(self, node_name: str) -> bool:
+        """检查该用户是否有某个知识图谱节点"""
+        query = "SELECT * FROM user_node_relationship WHERE user_id = %s AND node_name = %s"
+        User.cursor.execute(query, (self.id, node_name))
         result = User.cursor.fetchall()
 
         if result:  # 有节点
-            return 0
+            return True
         else:  # 无节点
-            return -1
+            return False
 
-    @staticmethod
-    def add_node(account: str, password: str) -> int:
-        """注册账号,-1表示账号已注册"""
-        query_exist_account = "SELECT * FROM users WHERE account = %s"
-        User.cursor.execute(query_exist_account, account)
+    def add_node(self, node_name: str) -> int:
+        """添加节点，若节点已存在引起异常"""
+        if self.has_node(node_name):
+            raise -1
 
-        if User.cursor.fetchall():
-            print('已存在账号，注册失败')
-            return -1
-
-        add_account = 'INSERT INTO users (account, password) VALUES(%s, %s)'
-        User.cursor.execute(add_account, (account, password))
+        cmd_add_node = 'INSERT INTO user_node_relationship (user_id, node_name) VALUES(%s, %s)'
+        User.cursor.execute(cmd_add_node, (self.id, node_name))
         User.db.commit()
-        print('账号注册成功')
+        # todo 网页抓取更新
         return 0
+
+
+if __name__ == '__main__':
+    test_account = 'lwz'
+    test_password = 'lwz_password'
+
+    User.register(test_account, test_password)
+    user = User.login(test_account, test_password)
+
+    user.add_node('test')

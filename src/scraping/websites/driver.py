@@ -7,6 +7,7 @@ def init_driver() -> WebDriver:
     options = Options()
     # 无头
     options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
     # 禁用图片显示
     prefs = {"profile.managed_default_content_settings.images": 2, 'permissions.default.stylesheet': 2}
     options.add_experimental_option("prefs", prefs)

@@ -1,32 +1,27 @@
-import re
+from line_profiler_pycharm import profile
 from selenium.webdriver.common.by import By
+
 from src.scraping.websites.driver import init_driver
-from typing import Iterable
+
+driver = init_driver()
 
 
-def scraping(keyword_collections: Iterable[str]):
-    driver = init_driver()
+@profile
+def scraping(keyword: str):
+    url_coursera = f"https://www.coursera.org/search?query={keyword}"
+    driver.get(url_coursera)
 
-    for keyword in keyword_collections:
-        url_coursera = f"https://www.coursera.org/search?query={keyword}&"
-        pattern = r'"href":"(.*?)"'
-        driver.get(url_coursera)
+    courses = driver.find_elements(By.XPATH, '//li[@class="cds-9 css-0 cds-11 cds-grid-item cds-56 cds-64 cds-76"]')
 
-        # 此网站一定存在结果，但可能不相关，此处忽略
+    course_info_list = list()
+    for i in courses:
+        name = i.find_element(By.XPATH, './/h2[@class="cds-119 css-h1jogs cds-121"]').text
+        link = i.find_element(By.XPATH, "./div/a").get_attribute('href')
+        school = i.find_element(By.XPATH, './/span[@class="cds-119 css-1mru19s cds-121"]').text
+        course_info_list.append(('coursera', name, link, school))
 
-        course_links = driver.find_elements(By.XPATH, '//div[@class="css-1cj5od"]/a')
-        course_names = driver.find_elements(By.XPATH, '//h2[@class="cds-119 css-h1jogs cds-121"]')
+    return course_info_list
 
-        course_link_list = list()
-        course_name_list = list()
 
-        for link in course_links:
-            link_str = re.search(pattern, link.get_attribute('data-click-value'))
-            course_link_list.append("https://www.coursera.org" + link_str.group(1))
-
-        for name in course_names:
-            course_name_list.append(name.text)
-
-        course_info_list = zip(course_name_list[1:], course_link_list)
-        yield course_info_list
+def close():
     driver.close()
