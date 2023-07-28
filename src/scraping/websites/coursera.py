@@ -1,7 +1,7 @@
 from line_profiler_pycharm import profile
 from selenium.webdriver.common.by import By
 
-from src.scraping.websites.driver import init_driver
+from .driver import init_driver
 
 driver = init_driver()
 
@@ -23,5 +23,9 @@ def scraping(keyword: str):
     return course_info_list
 
 
-def close():
-    driver.close()
+def driver_quit():
+    driver.quit()
+
+
+if __name__ == '__main__':
+    print(scraping('操作系统'))

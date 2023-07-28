@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QVBoxLayout, QPushButton
 
-from src.user.User import *
-from Utils import *
+from user.User import *
+from .Utils import *
 
 
 class LoginWindow(QWidget):

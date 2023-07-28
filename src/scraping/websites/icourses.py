@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from src.scraping.websites.driver import init_driver
+from .driver import init_driver
 
 driver = init_driver()
 
@@ -37,5 +37,5 @@ def scraping(keyword: str):
     return course_info_list
 
 
-def close():
-    driver.close()
+def driver_quit():
+    driver.quit()

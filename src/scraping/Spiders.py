@@ -1,8 +1,14 @@
+import os
+import time
 from typing import Iterable
 
-from websites import icourses, bilibili, netease, cmooc, coursera, haodaxue, imooc, mooc
 import multiprocessing
 import openpyxl
+
+from .websites import icourses, bilibili, netease, cmooc, ke, haodaxue, imooc, mooc
+
+
+# from .websites import bilibili, cmooc, ke, haodaxue, imooc, mooc
 
 
 class Spiders:
@@ -12,7 +18,8 @@ class Spiders:
         'bilibili': bilibili.scraping,
         'netease': netease.scraping,
         'cmooc': cmooc.scraping,
-        # 'coursera': coursera.scraping,
+        # 'coursera': coursera.scraping, # 不稳定，弃用
+        'ke': ke.scraping,
         'haodaxue': haodaxue.scraping,
         'imooc': imooc.scraping,
         'mooc': mooc.scraping,
@@ -29,14 +36,14 @@ class Spiders:
 
     @classmethod
     def close(cls):
-        bilibili.close()
-        cmooc.close()
-        coursera.close()
-        haodaxue.close()
-        icourses.close()
-        imooc.close()
-        mooc.close()
-        netease.close()
+        bilibili.driver_quit()
+        cmooc.driver_quit()
+        ke.driver_quit()
+        haodaxue.driver_quit()
+        imooc.driver_quit()
+        mooc.driver_quit()
+        icourses.driver_quit()
+        netease.driver_quit()
 
     @classmethod
     def scraping(cls, keywords: Iterable[str]) -> dict:
@@ -44,6 +51,8 @@ class Spiders:
         请尽量少调用(把关键词放一块)，每次抓取都要重新打开、关闭浏览器
         :return: dict.key是tuple[网页名,关键词] dict.value是list[tuple[标题,链接]]
         """
+        start_time = time.time()
+
         pool = multiprocessing.Pool(8)
         manager = multiprocessing.Manager()
 
@@ -57,7 +66,11 @@ class Spiders:
 
         pool.close()
         pool.join()
+        end_time_0 = time.time()
+        print('没有关闭浏览器耗时 ' + str(end_time_0 - start_time))
         cls.close()
+        end_time_1 = time.time()
+        print('关闭浏览器耗时 ' + str(end_time_1 - start_time))
         return shared_dict
 
 
@@ -68,15 +81,19 @@ def main():
     关键词前无空格，平台(共8个)前有1个空格，课程信息(课程名 链接)前有2个空格
     若 关键字 网页 爬取结果为空，则显示'  Empty'，前有2个空格
     """
-    in_file = open('CS_KG.txt', encoding='utf-8')
-    graph = in_file.readlines()
+    # with open(os.path.join(os.path.dirname(__file__), 'CS_KG.txt'), encoding='utf-8') as in_file:
+    #     graph = in_file.readlines()
 
-    words = list()
+    # words = list()
 
-    for line in graph:
-        words.append(line.strip())
+    # for line in graph:
+    #     words.append(line.strip())
+    words = ['面向对象']
 
+    start_time = time.time()
     res = Spiders.scraping(words)
+    end_time = time.time()
+    print(end_time - start_time)
 
     # 创建一个新的工作簿
     workbook = openpyxl.Workbook()
@@ -103,7 +120,7 @@ def main():
                 sheet.cell(row, column, unit)
 
     # 保存工作簿
-    workbook.save("example.xlsx")
+    workbook.save("scraping_offline.xlsx")
 
     # 关闭工作簿
     workbook.close()

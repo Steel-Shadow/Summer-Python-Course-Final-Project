@@ -4,9 +4,9 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QApplication
 
-from GraphWindow import *
-from LoginWindow import *
-from RegisterWindow import *
+from .GraphWindow import *
+from .LoginWindow import *
+from .RegisterWindow import *
 
 
 class MainWindow(QWidget):
@@ -58,7 +58,7 @@ class MainWindow(QWidget):
         event.accept()
 
 
-if __name__ == '__main__':
+def main():
     app = QApplication(sys.argv)
     main_win = MainWindow()
     main_win.show()

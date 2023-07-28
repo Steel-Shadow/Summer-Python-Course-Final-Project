@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QVBoxLayout, QTabWidget
 
-from Utils import *
+from .Utils import *
 
 
 class GraphWindow(QWidget):
