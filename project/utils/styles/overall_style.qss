@@ -1,0 +1,48 @@
+/*使用css文件进行总的美化设置*/
+
+
+QWidget{
+    background:#CAE1FF;
+}
+
+QApplication{
+    font-family:微软雅黑;
+    background:#CAE1FF;
+}
+
+QPushButton{
+    color:Black;
+    /*border-radius: 7px;*/
+    font-family:微软雅黑;
+    /*background:#6633FF;*/
+    border:1px;
+}
+
+QPushButton:hover{
+    background:	#BCD2EE;
+}
+
+QPushButton:pressed{
+    background:	#A2B5CD;
+}
+
+QWindowTitle{
+    font-family:微软雅黑;
+}
+
+QLabel{
+    font-family:微软雅黑;
+    background:#FFFFFF;
+}
+
+QMessageBox{
+    font-family:微软雅黑;
+    background:#FFFFFF;
+}
+
+QLineEdit{
+    border-radius: 7px;
+    font-family:微软雅黑;
+    border:1px;
+    background:#FFFFFF;
+}

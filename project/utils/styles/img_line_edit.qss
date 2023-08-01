@@ -1,0 +1,13 @@
+QGroupBox {
+    /*background:#CAE1FF*/
+    border: 1.5px solid black;
+    border-radius: 5px;
+}
+QLabel {
+    background:#CAE1FF;
+    border: 0px;
+}
+QLineEdit {
+    background:#CAE1FF;
+    border: 0px
+}

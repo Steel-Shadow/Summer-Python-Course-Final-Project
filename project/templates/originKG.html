@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>KnowledgeGraph</title>
+                <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
+            <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/themes/chalk.js"></script>
+    <!-- 引入外部 CSS 文件 -->
+    <link rel="stylesheet" href="interact/styles.css">
+</head>
+<body style="background-color: #CAE1FF;">
+    <!-- 引入CRUD功能的 JavaScript -->
+    <script src="interact/CRUD.js"></script>
+    <!-- 工具栏按钮 -->
+    <div id="toolbar-button" onclick="toggleToolbar()">工具栏</div>
+    <div id="toolbar">
+    <div>
+        <!-- 添加按钮 -->
+        <button onclick="createNode()">增加节点</button>
+        <!-- 添加输入框和下拉选择框 -->
+        <input type="text" id="addNameInput" size="10" placeholder="请输入节点名称">
+
+        <select id="nodeCategorySelect" onchange="onCategorySelectChange()">
+            <option value="类别">类别</option>
+            <option value="学科">学科</option>
+        </select>
+        <!-- 显示类别输入框 -->
+        <div id="fatherContainer" style="display: none;">
+            <input type="text" id="fatherInput" size="10" placeholder="请输入父节点">
+        </div>
+    </div>
+
+        <br>
+
+    <div>
+        <!-- 删除按钮 -->
+        <button onclick="deleteNode()">删除节点</button>
+        <input type="text" id="deleteNameInput" size="10" placeholder="请输入节点名称">
+    </div>
+
+        <br>
+
+    <div>
+        <!-- 更新按钮 -->
+        <button onclick="update()">批量更新</button>
+    </div>
+
+    <div id="tableContainer" style="display: none;">
+        <div>（请点击节点批量选择）</div>
+        <table id="infoTable">
+        <thead>
+            <tr>
+            <th>name</th>
+            <th>nameToChange</th>
+            <th>father</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        </table>
+        <button onclick="saveUpdate()">Save</button>
+    </div>
+
+        <br>
+
+    <div>
+        <!-- 增加书签按钮 -->
+        <button onclick="addNotes()">增加书签</button>
+    </div>
+
+    <div id="tableContainer1" style="display: none;">
+        <div>（请点击节点批量选择）</div>
+        <table id="infoTable1">
+        <thead>
+            <tr>
+            <th>name</th>
+            <th>category</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        </table>
+        <button onclick="saveNotes()">Save</button>
+    </div>
+
+        <br>
+
+    <div>
+        <!-- 删除书签按钮 -->
+        <button onclick="addDelete()">删除书签</button>
+    </div>
+
+    <div id="tableContainer2" style="display: none;">
+        <div>（请点击节点批量选择）</div>
+        <table id="infoTable2">
+        <thead>
+            <tr>
+            <th>name</th>
+            <th>category</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        </table>
+        <button onclick="deleteNotes()">Delete</button>
+    </div>
+
+    </div>
+    <div id="KG" class="chart-container"></div>
+        <script>
+        var chart_KG = echarts.init(
+            document.getElementById('KG'), 'chalk', {renderer: 'canvas'});
+        chart_KG.on('click', function (params) {
+            if (params.dataType === 'node' && params.data.category === "\u5b66\u79d1") {
+                var node = params.data;
+                sendNodeName(node.fixedName);
+            }
+        });
+        var option_KG = {
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "aria": {
+        "enabled": false
+    },
+    "series": [
+        {
+            "type": "graph",
+            "layout": "force",
+            "symbolSize": 10,
+            "circular": {
+                "rotateLabel": false
+            },
+            "force": {
+                "repulsion": 1000,
+                "gravity": 0.2,
+                "edgeLength": 30,
+                "friction": 0.6,
+                "layoutAnimation": true
+            },
+            "label": {
+                "show": true,
+                "position": "right",
+                "margin": 8
+            },
+            "lineStyle": {
+                "show": true,
+                "width": 1,
+                "opacity": 1,
+                "curveness": 0.2,
+                "type": "solid",
+                "color": "source"
+            },
+            "roam": true,
+            "draggable": true,
+            "focusNodeAdjacency": true,
+            "data": [],
+            "categories": [
+                {
+                    "name": "\u9886\u57df",
+                    "symbol": "circle",
+                    "itemStyle": {
+                        "color": "#ff3333"
+                    }
+                },
+                {
+                    "name": "\u7c7b\u522b",
+                    "symbol": "circle",
+                    "itemStyle": {
+                        "color": "#0099ff"
+                    }
+                },
+                {
+                    "name": "\u5b66\u79d1",
+                    "symbol": "circle",
+                    "itemStyle": {
+                        "color": "#33ff66"
+                    }
+                }
+            ],
+            "edgeLabel": {
+                "show": false,
+                "margin": 8
+            },
+            "edgeSymbol": [
+                null,
+                null
+            ],
+            "edgeSymbolSize": 10,
+            "links": []
+        }
+    ],
+    "legend": [
+        {
+            "data": [
+                "\u9886\u57df",
+                "\u7c7b\u522b",
+                "\u5b66\u79d1"
+            ],
+            "selected": {},
+            "type": "plain",
+            "selectedMode": "multiple",
+            "show": true,
+            "left": "2%",
+            "top": "center",
+            "orient": "vertical",
+            "padding": 5,
+            "itemGap": 10,
+            "itemWidth": 10,
+            "itemHeight": 14,
+            "textStyle": {
+                "color": "white",
+                "fontSize": 13
+            },
+            "icon": "circle",
+            "backgroundColor": "transparent",
+            "borderColor": "#ccc",
+            "borderWidth": 1,
+            "borderRadius": 0,
+            "pageButtonItemGap": 5,
+            "pageButtonPosition": "end",
+            "pageFormatter": "{current}/{total}",
+            "pageIconColor": "#2f4554",
+            "pageIconInactiveColor": "#aaa",
+            "pageIconSize": 15,
+            "animationDurationUpdate": 800,
+            "selector": false,
+            "selectorPosition": "auto",
+            "selectorItemGap": 7,
+            "selectorButtonGap": 10
+        }
+    ],
+    "tooltip": {
+        "show": true,
+        "trigger": "item",
+        "triggerOn": "mousemove|click",
+        "axisPointer": {
+            "type": "line"
+        },
+        "showContent": true,
+        "alwaysShowContent": false,
+        "showDelay": 0,
+        "hideDelay": 100,
+        "enterable": false,
+        "confine": false,
+        "appendToBody": false,
+        "transitionDuration": 0.4,
+        "formatter": "{c}",
+        "textStyle": {
+            "fontSize": 14
+        },
+        "borderWidth": 0,
+        "padding": 5,
+        "order": "seriesAsc"
+    },
+    "title": [
+        {
+            "show": true,
+            "text": "Knowledge Graph of Computer Science",
+            "target": "blank",
+            "subtarget": "blank",
+            "padding": 5,
+            "itemGap": 10,
+            "textAlign": "auto",
+            "textVerticalAlign": "auto",
+            "triggerEvent": false
+        }
+    ],
+    "toolbox": {
+        "show": true,
+        "orient": "horizontal",
+        "itemSize": 15,
+        "itemGap": 10,
+        "left": "right",
+        "feature": {
+            "saveAsImage": {},
+            "restore": {},
+            "dataView": {}
+        }
+    }
+};
+        chart_KG.setOption(option_KG);
+    </script>
+</body>
+</html>

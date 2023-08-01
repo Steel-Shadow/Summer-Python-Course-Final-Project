@@ -1,0 +1,24 @@
+QDialog {
+    background:#EE0000;
+}
+
+QLabel{
+    color:#FFFFFF;
+    text-align:left;
+    font-size:15px;
+    font-weight:500;
+    font-family: "黑体";
+}
+
+QPushButton {
+    color:White;
+    background:	#EE0000;
+    border:0px;
+}
+QPushButton:hover{
+    background:	#CD0000;
+}
+QPushButton:pressed{
+    background:	#8B0000;
+}
+

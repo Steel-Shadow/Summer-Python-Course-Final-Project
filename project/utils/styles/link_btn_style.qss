@@ -1,0 +1,7 @@
+background-color: transparent;
+border: none;
+color: #6633FF;
+text-decoration: underline;
+font-size: inherit;
+font-family: 黑体;
+padding: 0;

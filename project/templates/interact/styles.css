@@ -1,0 +1,212 @@
+/* 工具栏容器样式 */
+#toolbar {
+    position: absolute;
+    top: 100px;
+    right: 15px;
+    width: 310px;
+    height: 500px;
+    background-color: #CAE1FF;
+    display: none;
+    z-index: 1;
+}
+
+/* 工具栏按钮样式 */
+#toolbar-button {
+    position: absolute;
+    top: 10px;
+    right: 150px;
+    width: 50px;
+    height: 50px;
+    background-color: #483D8B;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* 图表样式 */
+#KG {
+    width: 1130px;
+    height: 760px;
+    margin-top: 0px;
+    margin-left: 0px;
+    position: relative;
+    /* 将图表容器设置为相对定位，以便绝对定位的工具栏相对于图表容器定位 */
+}
+
+/* 表格样式 */
+#infoTable {
+    width: 100%;
+    /* 表格宽度 */
+    border-collapse: collapse;
+    /* 边框合并 */
+}
+
+/* 表头样式 */
+#infoTable th {
+    background-color: #e0e0e0;
+    /* 表头背景颜色 */
+    padding: 6px;
+    /* 内边距（调整单元格大小） */
+    border: 1px solid #ccc;
+    /* 边框样式 */
+    text-align: center;
+    /* 文本居中对齐 */
+    font-size: 12px;
+    /* 表头字体大小 */
+}
+
+/* 输入框单元格样式 */
+#infoTable td input.small-input {
+    width: 80px;
+    /* 输入框宽度 */
+    font-size: 10px;
+    /* 输入框字体大小 */
+    padding: 2px;
+    /* 输入框内边距（调整输入框大小） */
+}
+
+/* 单元格样式 */
+#infoTable td {
+    padding: 4px;
+    /* 内边距（调整单元格大小） */
+    border: 1px solid #ccc;
+    /* 边框样式 */
+    text-align: center;
+    /* 文本居中对齐 */
+    font-size: 10px;
+    /* 单元格字体大小 */
+}
+
+/* 保存按钮样式 */
+#tableContainer button {
+    margin-top: 10px;
+    /* 与表格的间距 */
+    padding: 10px 20px;
+    /* 按钮内边距 */
+    background-color: #007BFF;
+    /* 按钮背景颜色 */
+    color: #fff;
+    /* 按钮文字颜色 */
+    border: none;
+    /* 去除边框 */
+    cursor: pointer;
+}
+
+/* 保存按钮悬停样式 */
+#tableContainer button:hover {
+    background-color: #0056b3;
+    /* 按钮悬停时背景颜色 */
+}
+
+/* 表格样式 */
+#infoTable1 {
+    width: 100%;
+    /* 表格宽度 */
+    border-collapse: collapse;
+    /* 边框合并 */
+}
+
+/* 表头样式 */
+#infoTable1 th {
+    background-color: #e0e0e0;
+    /* 表头背景颜色 */
+    padding: 6px;
+    /* 内边距（调整单元格大小） */
+    border: 1px solid #ccc;
+    /* 边框样式 */
+    text-align: center;
+    /* 文本居中对齐 */
+    font-size: 12px;
+    /* 表头字体大小 */
+}
+
+/* 单元格样式 */
+#infoTable1 td {
+    padding: 4px;
+    /* 内边距（调整单元格大小） */
+    border: 1px solid #ccc;
+    /* 边框样式 */
+    text-align: center;
+    /* 文本居中对齐 */
+    font-size: 10px;
+    /* 单元格字体大小 */
+}
+
+/* 保存按钮样式 */
+#tableContainer1 button {
+    margin-top: 10px;
+    /* 与表格的间距 */
+    padding: 10px 20px;
+    /* 按钮内边距 */
+    background-color: #007BFF;
+    /* 按钮背景颜色 */
+    color: #fff;
+    /* 按钮文字颜色 */
+    border: none;
+    /* 去除边框 */
+    cursor: pointer;
+}
+
+/* 保存按钮悬停样式 */
+#tableContainer1 button:hover {
+    background-color: #0056b3;
+    /* 按钮悬停时背景颜色 */
+}
+
+/* 表格样式 */
+#infoTable2 {
+    width: 100%;
+    /* 表格宽度 */
+    border-collapse: collapse;
+    /* 边框合并 */
+}
+
+/* 表头样式 */
+#infoTable2 th {
+    background-color: #e0e0e0;
+    /* 表头背景颜色 */
+    padding: 6px;
+    /* 内边距（调整单元格大小） */
+    border: 1px solid #ccc;
+    /* 边框样式 */
+    text-align: center;
+    /* 文本居中对齐 */
+    font-size: 12px;
+    /* 表头字体大小 */
+}
+
+/* 单元格样式 */
+#infoTable2 td {
+    padding: 4px;
+    /* 内边距（调整单元格大小） */
+    border: 1px solid #ccc;
+    /* 边框样式 */
+    text-align: center;
+    /* 文本居中对齐 */
+    font-size: 10px;
+    /* 单元格字体大小 */
+}
+
+/* 保存按钮样式 */
+#tableContainer2 button {
+    margin-top: 10px;
+    /* 与表格的间距 */
+    padding: 10px 20px;
+    /* 按钮内边距 */
+    background-color: #007BFF;
+    /* 按钮背景颜色 */
+    color: #fff;
+    /* 按钮文字颜色 */
+    border: none;
+    /* 去除边框 */
+    cursor: pointer;
+}
+
+/* 保存按钮悬停样式 */
+#tableContainer2 button:hover {
+    background-color: #ff0000;
+    /* 按钮悬停时背景颜色 */
+}
